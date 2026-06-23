@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testbaan HyperBRIDGE Mark Boekhoud</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <audio id="bg-music" style="display: none;" autoplay loop volume="0.2">
+        <source src="Audio/bg-music.mp4" type="audio/mpeg">
+    </audio>
+    
+    <script>
+        // Set background music volume to 20%
+        document.addEventListener('DOMContentLoaded', () => {
+            const bgMusic = document.getElementById('bg-music');
+            if (bgMusic) {
+                bgMusic.volume = 0.4;
+            }
+        });
+    </script>
+
+    <div id="screen-disconnected" class="screen active">
+        <button id="connect-btn">Verbind de Arduino</button>
+        <h1><span style="color: #F41616;">●</span> Niet verbonden</h1>
+        <p id="status">Wachten op verbinding...</p>
+    </div>
+
+    <div id="screen-ready" class="screen">
+        <div class="top-right-text">Word jij binnenkort een echte<br>hyperloop ingeneur?</div>
+        <img id="ready-image" src="images/virgin-hyperloop-one-pod.webp" alt="Hyperloop-pod" class="ready-image">
+        <h1 class="ready-text">Druk op de roze knop om te starten</h1>
+    </div>
+
+    <div id="screen-next" class="screen">       
+        <div class="blocks-container">
+            
+            <div class="block" id="block-1">
+                <h3 class="block-title">Vacuüm</h3>
+                <p class="block-subtitle-1">LUCHTDRUK</p>
+                <p class="block-explanation">Pascal (Pa) meet luchtdruk binnen de buis.</p>
+                <p class="block-big-value" id="slider1-display">0</p>
+                <p class="block-unit">Pascal</p>
+                <div class="block-small-values">
+                    <p><span class="block-label">DICHTHEID</span> <span class="block-value" id="density-value">1.225 kg/m3</span></p>
+                    <p><span class="block-label">WEERSTAND</span> <span class="block-value" id="drag-value">100.0 %</span></p>
+                </div>
+                <div class="dots-container" id="dots-container"></div>
+            </div>
+
+            <div class="block" id="block-2">
+                <h3 class="block-title">Levitatie</h3>
+                <p class="block-subtitle-2">MAGNETISCH VELD</p>
+                <p class="block-explanation">Zoek de perfecte balans. Te veel of te weinig kracht maakt het systeem onstabiel.</p>
+
+                <div class="image-container">
+                    <div class="floating-line floating-line-top"></div>
+                    <img id="block-2-image" src="images/virgin-hyperloop-one-pod.webp" alt="Hyperloop-pod" class="ready-image">
+                    <div class="floating-line floating-line-bottom"></div>
+                </div>
+            </div>
+
+            <div class="block" id="block-3">
+                <h3 class="block-title">Propulsie</h3>
+                <p class="block-subtitle-3">MOTORKRACHT</p>
+                <p class="block-explanation">Een lineaire motor duwt de pod vooruit zonder wielen. Het vermogen bepaalt de acceleratie.</p>
+                <p class="block-big-value" id="slider3-display">0%</p>
+                <div class="block-small-values">
+                    <div class="propulsie-bar-container">
+                    <div class="propulsie-bar" id="propulsion-bar" style="width: 0%;"></div>
+                </div>
+                </div>
+            </div>
+        </div>
+        <p class="screen-next-bottom-text">Druk op de knop voor het resultaat</p>
+    </div>
+
+    <div id="screen-end" class="screen">
+        <div class="end-container">
+            <div class="end-top-section">
+                <h1 id="end-title">Resultaat</h1>
+                <p id="end-description"></p>
+            </div>
+            
+            <div class="end-middle-section">
+                <div class="end-left-section">
+                    <div class="end-data-item large" id="end-score">
+    <span class="end-label">Totaalscore</span>
+    <div class="score-wrapper">
+        <span class="end-value">0</span>
+        <span class="score-max">/100</span>
+    </div>
+</div>
+                    <div class="end-data-item" id="end-energy">
+                        <span class="end-label">Energieverbruik</span>
+                        <span class="end-value">0kw</span>
+                    </div>
+                </div>
+                
+                <img id="end-image" src="images/virgin-hyperloop-one-pod.webp" alt="Hyperloop-pod" class="end-image">
+                
+                <div class="end-right-section">
+                    <div class="end-data-item" id="end-speed">
+                        <span class="end-label">Topsnelheid</span>
+                        <span class="end-value">0kph</span>
+                    </div>
+                    <div class="end-data-item" id="end-efficiency">
+                        <span class="end-label">Efficiëntie</span>
+                        <span class="end-value">0%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="end-bottom-section">
+                <div class="end-data-item" id="end-safety">
+                    <span class="end-label">Veiligheid</span>
+                    <span class="end-value">0%</span>
+                </div>
+            </div>
+        </div>
+        
+        <p class="screen-end-bottom-text">Druk op de knop om te resetten</p>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+---
+---Gebruik van het prototype zonder Arduino---
+Dit prototype is primair ontworpen om bestuurd te worden met een fysiek controlepaneel. Wanneer dit paneel niet is aangesloten, werkt het prototype met beperkte functionaliteit en kunnen de drie factoren niet handmatig worden ingesteld.
+Om het prototype toch te kunnen bekijken en de interface te testen, is er een alternatieve besturing ingebouwd: gebruik de '9'-toets op je toetsenbord om door de verschillende pagina's heen te navigeren.
+
+---Code opstarten---
+Om het prototype lokaal te draaien, kan de Live Server extensie in Visual Studio Code worden gebruikt.
+Open de projectmap in Visual Studio Code.
+Klik rechtsonder in op "Go Live".
+Het prototype opent nu automatisch in je standaard webbrowser.
+
+---Gebruik van AI-tools---
+Tijdens de ontwikkeling van dit prototype is gebruikgemaakt van GitHub Copilot. Deze AI-assistent is ingezet om efficiënter code te schrijven en het algehele ontwikkelproces en de realisatie van het prototype te versnellen.
+
+---Code voor de Arduino---
+Als je de hardware (de Arduino en alle benodigde componenten) wel hebt aangesloten, moet de bijbehorende software worden ingeladen. Kopieer de onderstaande code naar de Arduino IDE en upload deze naar het board om de verbinding met het controlepaneel tot stand te brengen.
+
+// --- BIG BUTTON VARIABLES ---
+const int buttonPin = 2; 
+int buttonState = 0;         
+int lastButtonState = HIGH;  
+
+// --- POTENTIOMETER VARIABLES (Vervangt de Rotary Encoder) ---
+const int potPin = A2; // De middelste pin van de B10K
+int lastPotValue = -100; 
+
+// --- SLIDER VARIABLES ---
+const int slider1Pin = A1;
+const int slider2Pin = A0;
+int lastSlider1Value = -100; 
+int lastSlider2Value = -100;
+
+void setup() {
+  Serial.begin(9600);
+  
+  pinMode(buttonPin, INPUT_PULLUP); 
+  // Analoge pinnen (A0, A1, A2) hoef je niet expliciet als INPUT te declareren in de setup.
+}
+
+void loop() {
+  // -------------------------
+  // 1. BIG BUTTON LOGIC
+  // -------------------------
+  buttonState = digitalRead(buttonPin);
+  if (buttonState != lastButtonState) {
+    if (buttonState == LOW) { 
+      Serial.println("PRESSED");
+    } 
+    delay(150); 
+  }
+  lastButtonState = buttonState;
+
+  // -------------------------
+  // 2. POTENTIOMETER LOGIC (Nieuw)
+  // -------------------------
+  int rawPot = analogRead(potPin);
+  
+  // Vertaal de rauwe waarde (0-1023) naar 0-100, net als je oude encoder
+  int currentPot = map(rawPot, 0, 1023, 100, 0);
+  
+  // Check of de waarde is veranderd (met een kleine marge tegen ruis)
+  if (abs(currentPot - lastPotValue) > 1) {
+    Serial.println(currentPot);
+    lastPotValue = currentPot;
+  }
+
+  // -------------------------
+  // 3. SLIDER 1 LOGIC (Input 1)
+  // -------------------------
+  int rawSlider1 = analogRead(slider1Pin);
+  
+  // FIXED: Flipped 0, 1000 to 1000, 0 to invert the slider direction
+  int currentSlider1 = map(rawSlider1, 0, 1023, 1000, 0);
+  
+  // SNAP ZONES: Force to exactly 0 or 1000 at the ends
+  if (currentSlider1 < 15) {
+    currentSlider1 = 0;
+  } else if (currentSlider1 > 985) {
+    currentSlider1 = 1000;
+  }
+  
+  if (abs(currentSlider1 - lastSlider1Value) > 5) {
+    Serial.print("S1:");            
+    Serial.println(currentSlider1); 
+    lastSlider1Value = currentSlider1;
+  }
+
+  // -------------------------
+  // 4. SLIDER 2 LOGIC (Input 2)
+  // -------------------------
+  int rawSlider2 = analogRead(slider2Pin);
+  
+  // FIXED: Flipped 0, 1000 to 1000, 0 to invert the slider direction
+  int currentSlider2 = map(rawSlider2, 0, 1023, 1000, 0);
+  
+  // SNAP ZONES: Force to exactly 0 or 1000 at the ends
+  if (currentSlider2 < 15) {
+    currentSlider2 = 0;
+  } else if (currentSlider2 > 985) {
+    currentSlider2 = 1000;
+  }
+  
+  if (abs(currentSlider2 - lastSlider2Value) > 5) {
+    Serial.print("S2:");            
+    Serial.println(currentSlider2); 
+    lastSlider2Value = currentSlider2;
+  }
+}
