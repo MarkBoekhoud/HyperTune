@@ -354,18 +354,18 @@ function getPerformanceLevel(value, type) {
 }
 
 function playScenarioSound(title, numericSpeed) {
-    let soundFile = 'Audio/normal.mp3'; 
+    let soundFile = 'audio/normal.mp3'; 
 
     if (numericSpeed === 0) {
-        soundFile = 'Audio/power-off.mp3'; 
+        soundFile = 'audio/power-off.mp3'; 
     } else if (title.includes('Schurende') || title.includes('Crash') || title.includes('Wrijving')) {
-        soundFile = 'Audio/slow.mp3'; 
+        soundFile = 'audio/slow.mp3'; 
     } else if (title.includes('Knal') || title.includes('Muur') || title.includes('Verstikking')) {
-        soundFile = 'Audio/slow.mp3'; 
+        soundFile = 'audio/slow.mp3'; 
     } else if (numericSpeed >= 900) {
-        soundFile = 'Audio/perfect.mp3'; 
+        soundFile = 'audio/perfect.mp3'; 
     } else if (numericSpeed < 200) {
-        soundFile = 'Audio/slow.mp3'; 
+        soundFile = 'audio/slow.mp3'; 
     }
 
     const audio = new Audio(soundFile);
@@ -566,7 +566,7 @@ function renderEndScreenFromInputs() {
             statsOrderToPop.forEach((el, index) => {
                 if (el) {
                     safeTimeout(() => {
-                        const popSounds = ['Audio/pop1.mp3', 'Audio/pop2.mp3', 'Audio/pop3.mp3'];
+                        const popSounds = ['audio/pop1.mp3', 'audio/pop2.mp3', 'audio/pop3.mp3'];
                         const randomPopSound = popSounds[Math.floor(Math.random() * popSounds.length)];
                         const popAudio = new Audio(randomPopSound);
                         popAudio.volume = 0.3;
