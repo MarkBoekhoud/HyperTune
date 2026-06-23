@@ -1,27 +1,31 @@
----
----Gebruik van het prototype zonder Arduino---
-Dit prototype is primair ontworpen om bestuurd te worden met een fysiek controlepaneel. Wanneer dit paneel niet is aangesloten, werkt het prototype met beperkte functionaliteit en kunnen de drie factoren niet handmatig worden ingesteld.
-Om het prototype toch te kunnen bekijken en de interface te testen, is er een alternatieve besturing ingebouwd: gebruik de '9'-toets op je toetsenbord om door de verschillende pagina's heen te navigeren.
+## Using the prototype without an Arduino
+This prototype is mainly designed to be controlled with a physical control panel. When this panel is not connected, the prototype works with limited functionality and the three factors cannot be set manually.
 
----Code opstarten---
-Om het prototype lokaal te draaien, kan de Live Server extensie in Visual Studio Code worden gebruikt.
-Open de projectmap in Visual Studio Code.
-Klik rechtsonder in op "Go Live".
-Het prototype opent nu automatisch in je standaard webbrowser.
+To still view the prototype and test the interface, an alternative control method is built in: use the **`9`** key on your keyboard to navigate through the different pages.
 
----Gebruik van AI-tools---
-Tijdens de ontwikkeling van dit prototype is gebruikgemaakt van GitHub Copilot. Deze AI-assistent is ingezet om efficiënter code te schrijven en het algehele ontwikkelproces en de realisatie van het prototype te versnellen.
 
----Code voor de Arduino---
-Als je de hardware (de Arduino en alle benodigde componenten) wel hebt aangesloten, moet de bijbehorende software worden ingeladen. Kopieer de onderstaande code naar de Arduino IDE en upload deze naar het board om de verbinding met het controlepaneel tot stand te brengen.
+## Starting the code
+To run the prototype locally, you can use the Live Server extension in Visual Studio Code.
+
+1. Open the project folder in Visual Studio Code.
+2. Click on **"Go Live"** in the bottom right corner.
+3. The prototype will now open automatically in your default web browser.
+
+
+## Use of AI tools
+**GitHub Copilot** was used during the development of this prototype. This AI assistant helped to write code more efficiently and to speed up the overall development process and the creation of the prototype.
+
+
+## Code for the Arduino
+If you do have the hardware connected (the Arduino and all necessary components), the corresponding software needs to be loaded. Copy the code below into the Arduino IDE and upload it to the board to connect it with the control panel.
 
 // --- BIG BUTTON VARIABLES ---
 const int buttonPin = 2; 
 int buttonState = 0;         
 int lastButtonState = HIGH;  
 
-// --- POTENTIOMETER VARIABLES (Vervangt de Rotary Encoder) ---
-const int potPin = A2; // De middelste pin van de B10K
+// --- POTENTIOMETER VARIABLES (Replaces the Rotary Encoder) ---
+const int potPin = A2; // The middle pin of the B10K
 int lastPotValue = -100; 
 
 // --- SLIDER VARIABLES ---
@@ -34,7 +38,7 @@ void setup() {
   Serial.begin(9600);
   
   pinMode(buttonPin, INPUT_PULLUP); 
-  // Analoge pinnen (A0, A1, A2) hoef je niet expliciet als INPUT te declareren in de setup.
+  // Analog pins (A0, A1, A2) do not need to be explicitly declared as INPUT in the setup.
 }
 
 void loop() {
@@ -51,14 +55,14 @@ void loop() {
   lastButtonState = buttonState;
 
   // -------------------------
-  // 2. POTENTIOMETER LOGIC (Nieuw)
+  // 2. POTENTIOMETER LOGIC (New)
   // -------------------------
   int rawPot = analogRead(potPin);
   
-  // Vertaal de rauwe waarde (0-1023) naar 0-100, net als je oude encoder
+  // Map the raw value (0-1023) to 0-100, just like your old encoder
   int currentPot = map(rawPot, 0, 1023, 100, 0);
   
-  // Check of de waarde is veranderd (met een kleine marge tegen ruis)
+  // Check if the value has changed (with a small margin against noise)
   if (abs(currentPot - lastPotValue) > 1) {
     Serial.println(currentPot);
     lastPotValue = currentPot;
